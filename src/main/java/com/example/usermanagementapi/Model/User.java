@@ -3,6 +3,10 @@ package com.example.usermanagementapi.Model;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
+
+import java.time.LocalDateTime;
 
 @Entity@Table(name = "users")
 public class User {
@@ -55,4 +59,12 @@ public class User {
     @NotBlank(message = "email is required")
     @Email(message = "email should be valid")
     private String email;
+
+    @Column(name="created_at",updatable=false)
+    @CreationTimestamp
+    private LocalDateTime createdAt;
+
+    @Column(name="updated_at")
+    @UpdateTimestamp
+    private LocalDateTime updatedAt;
 }
