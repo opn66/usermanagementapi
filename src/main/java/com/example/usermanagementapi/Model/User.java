@@ -8,26 +8,41 @@ import org.hibernate.annotations.UpdateTimestamp;
 
 import java.time.LocalDateTime;
 
-@Entity@Table(name = "users")
+@Entity
+@Table(name = "users")
 public class User {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
-    @Override
-    public String toString() {
-        return "User{" +
-                "id=" + id +
-                ", name='" + name + '\'' +
-                ", email='" + email + '\'' +
-                '}';
+    @NotBlank(message = "name is required")
+    private String name;
+
+    @NotBlank(message = "email is required")
+    @Email(message = "email should be valid")
+    private String email;
+
+    @Column(name = "created_at", updatable = false)
+    @CreationTimestamp
+    private LocalDateTime createdAt;
+
+    @Column(name = "updated_at")
+    @UpdateTimestamp
+    private LocalDateTime updatedAt;
+
+    // ✅ Default constructor (required by Hibernate)
+    public User() {
     }
 
+    // Optional constructor
     public User(long id, String name, String email) {
         this.id = id;
         this.name = name;
         this.email = email;
     }
+
+    // Getters and Setters
 
     public long getId() {
         return id;
@@ -53,18 +68,30 @@ public class User {
         this.email = email;
     }
 
-    @NotBlank(message = "name is required")
-    private String name;
+    public LocalDateTime getCreatedAt() {
+        return createdAt;
+    }
 
-    @NotBlank(message = "email is required")
-    @Email(message = "email should be valid")
-    private String email;
+    public void setCreatedAt(LocalDateTime createdAt) {
+        this.createdAt = createdAt;
+    }
 
-    @Column(name="created_at",updatable=false)
-    @CreationTimestamp
-    private LocalDateTime createdAt;
+    public LocalDateTime getUpdatedAt() {
+        return updatedAt;
+    }
 
-    @Column(name="updated_at")
-    @UpdateTimestamp
-    private LocalDateTime updatedAt;
+    public void setUpdatedAt(LocalDateTime updatedAt) {
+        this.updatedAt = updatedAt;
+    }
+
+    @Override
+    public String toString() {
+        return "User{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                ", email='" + email + '\'' +
+                ", createdAt='" + createdAt + '\'' +
+                ", updatedAt='" + updatedAt + '\'' +
+                '}';
+    }
 }
